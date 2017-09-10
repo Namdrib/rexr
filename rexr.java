@@ -57,7 +57,7 @@ public class rexr
 				break;
 			}
 		}
-		System.err.println("Num args: " + numCorrectArgs);
+		
 		List<Integer> out = new ArrayList<Integer>();
 		// Take the numbers from the arguments
 		if (numCorrectArgs >= 3)
@@ -92,8 +92,6 @@ public class rexr
 
 	public static boolean matchesSummary(String s)
 	{
-		// return s.equals("summary") || s.equals("summarise") ||
-		// s.equals("summarize");
 		return s.matches("summar(y|i(s|z)e)");
 	}
 
@@ -102,8 +100,6 @@ public class rexr
 		String programName = "rexr";
 		if (args.length < 1)
 		{
-			// programName = this.getClass().getName();
-			// programName = System.getProperty("program.name");
 			usage(programName);
 			return; // Calling exit will probably quit the bot
 		}
@@ -123,7 +119,6 @@ public class rexr
 			List<Integer> array = getNumbersFromUser(args, 2);
 			try
 			{
-				System.err.println("Got " + Arrays.toString(array.toArray()));
 				if (r.appendTo(user, array))
 				{
 					System.out.println("Succesfully added entry to " + user);

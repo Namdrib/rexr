@@ -5,6 +5,7 @@ For: Yes
 ---
 
 ## Upcoming changes
+- Allow adding of "REST" days
 - Consolidate ALL users' files into a summary
 - Discord Bot this
 - Better command line parsing
