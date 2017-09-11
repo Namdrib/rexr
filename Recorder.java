@@ -164,7 +164,9 @@ public class Recorder
 			{
 				// Write headers
 				bw.write("DATE       | " + user + "\n");
+				System.out.print("DATE       | " + user + "\n");
 				bw.write("-----------+-------------\n");
+				System.out.print("-----------+-------------\n");
 
 				// Read from br day-by-day, accumulating the {1,2,3}
 				// and write the day summary into bw
@@ -207,6 +209,7 @@ public class Recorder
 						}
 					}
 					bw.write(date + " | " + out + "\n");
+					System.out.print(date + " | " + out + "\n");
 				}
 			}
 			catch (IOException e)
