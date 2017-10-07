@@ -1,27 +1,36 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class rexr
 {
 	public static void usage(String programName)
 	{
 		System.out.println("Usage:");
-		System.out.println("java " + programName
-				+ "user name [numPushups numSitups numSquats]");
+		System.out.println("Add an exercise entry to a user");
+		System.out.println(
+				"java " + programName + " add name [pushups situps squats]");
 		System.out.println("  To add a set of exercises towards name");
 		System.out.println(
-				"  If num{Pushups,Situps,Squats} is not given, at least three");
-		System.out.println(
-				"  numbers must be provided from stdin, otherwise the program");
-		System.out.println("  will exit with no outcome");
-		System.out.println("OR\n");
-		System.out.println("java " + programName + " summar(y|i(s|z)e) [name]");
+				"  If {pushups,situps,squats} is not given, at least three numbers\n  must be provided from stdin, otherwise the program will exit with no outcome");
+		System.out.println("--");
+		
+		System.out.println("Summarise user data");
+		System.out.println("java " + programName + " summarise [name]");
 		System.out.println(
 				"  To produce a human-redable summary of name's exercise so far,");
-		System.out.println("  or leave the name out to summarise all\n");
+		System.out.println("  or leave the name out to summarise all");
+		System.out.println("--");
+		
+		System.out.println("List all users with existing entries");
+		System.out.println("java rexr list");
+		System.out.println("  To list the names of all users who have added at least one entry");
+		System.out.println("--");
+		
 		System.out.println("Read docs/readme.md for more information");
 	}
 
@@ -57,12 +66,13 @@ public class rexr
 				break;
 			}
 		}
-		
+
 		List<Integer> out = new ArrayList<Integer>();
 		// Take the numbers from the arguments
 		if (numCorrectArgs >= 3)
 		{
-			for (int i = firstNonOption; i < numCorrectArgs + firstNonOption; i++)
+			for (int i = firstNonOption; i < numCorrectArgs
+					+ firstNonOption; i++)
 			{
 				out.add(Integer.parseInt(args[i]));
 			}
@@ -106,75 +116,92 @@ public class rexr
 
 		String command = args[0];
 		Recorder r = new Recorder();
-		if (command.equals("user"))
+		switch (command)
 		{
-			if (args.length < 2)
+			case "add":
 			{
-				usage(programName);
-				return;
-			}
-
-			String user = args[1];
-			// int[] array = {-9999, -1, 0, 1, 12, 123, 1234};
-			List<Integer> array = getNumbersFromUser(args, 2);
-			try
-			{
-				if (r.appendTo(user, array))
+				if (args.length < 2)
 				{
-					System.out.println("Succesfully added entry to " + user);
+					usage(programName);
+					return;
+				}
+	
+				String user = args[1];
+				List<Integer> array = getNumbersFromUser(args, 2);
+				try
+				{
+					if (r.addEntryFor(user, array))
+					{
+						System.out.println("Succesfully added entry to " + user);
+					}
+					else
+					{
+						System.out.println("Failed to add entry to " + user);
+					}
+				}
+				catch (Exception e)
+				{
+					System.out.println(e);
+				}
+				break;
+			}
+			case "summarise":
+			{
+				// Check for another command
+				if (args.length >= 2)
+				{
+					// for each argument
+					// attempt to consolidate that user
+					// if that files does not exist, stop
+					for (int i = 1; i < args.length; i++)
+					{
+						String user = args[i];
+						try
+						{
+							r.summarise(user);
+							if (i < args.length - 1)
+							{
+								System.out.println("");
+							}
+						}
+						catch (IOException e)
+						{
+							e.printStackTrace();
+							System.out.println("Error, could not summarise " + user);
+							break;
+						}
+					}
 				}
 				else
 				{
-					System.out.println("Failed to add entry to " + user);
-				}
-			}
-			catch (Exception e)
-			{
-				System.out.println(e);
-			}
-		}
-		else if (matchesSummary(command))
-		{
-			// Check for another command
-			if (args.length >= 2)
-			{
-				// for each argument
-				// attempt to consolidate that user
-				// if that files does not exist, stop
-				for (int i = 1; i < args.length; i++)
-				{
-					String user = args[i];
+					// summarise all "docs/*_exercise.log" into "docs/summary.log"
 					try
 					{
-						r.summarise(user);
+						r.summarise("");
 					}
 					catch (IOException e)
 					{
 						e.printStackTrace();
-						System.out
-								.println("Error, could not summarise " + user);
-						break;
+						System.out.println("Error, could not summarise all users");
 					}
 				}
+				break;
 			}
-			else
+		
+			case "list":
 			{
-				// summarise all "docs/*_exercise.log" into "docs/summary.log"
-				try
+				Set<String> users = r.getListOfUsers();
+				for (Iterator<String> it = users.iterator(); it.hasNext();)
 				{
-					r.summarise("");
+					System.out.println(it.next());
 				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-					System.out.println("Error, could not summarise all users");
-				}
+				break;
 			}
-
-		}
-		else
-		{
-			usage(programName);
+			
+			default:
+			{
+				usage(programName);
+			}
 		}
 	}
 }

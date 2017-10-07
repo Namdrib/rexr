@@ -2,13 +2,18 @@
 // A bunch of file-writing/reading imports
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Recorder
 {
@@ -81,7 +86,7 @@ public class Recorder
 	}
 
 	// Append the listed exercises into a file for the user
-	public boolean appendTo(String user, List<Integer> exercises)
+	public boolean addEntryFor(String user, List<Integer> exercises)
 			throws IOException
 	{
 		// Ensure appropriate size
@@ -149,7 +154,7 @@ public class Recorder
 			// read through all of them to determine which date was earliest
 			// do this date on all files that have this date
 			// those which don't should have a `-` entry instead of numbers
-			// ideally pretty print so that each row is a data, each column is from a file
+			// ideally pretty print so that each row is a date, each column is from a file
 			
 			// Perhaps it'll be easier to do this if individually
 			// summarise each thing first, then append?
@@ -164,8 +169,8 @@ public class Recorder
 			{
 				// Write headers
 				bw.write("DATE       | " + user + "\n");
-				System.out.print("DATE       | " + user + "\n");
 				bw.write("-----------+-------------\n");
+				System.out.print("DATE       | " + user + "\n");
 				System.out.print("-----------+-------------\n");
 
 				// Read from br day-by-day, accumulating the {1,2,3}
@@ -177,7 +182,8 @@ public class Recorder
 					{
 						date = s.substring(4, s.length() - 4);
 					}
-					int[] total = { 0, 0, 0 };
+					int[] total = new int[numDefaultExercises];
+					Arrays.fill(total, 0);
 
 					// Read all entries for this date
 					while (true)
@@ -218,5 +224,31 @@ public class Recorder
 			}
 		}
 		return true;
+	}
+	
+	private String getUsernameFrom(File f)
+	{
+		String filename = f.toString();
+		int endIndex = filename.length() - (filename.endsWith(summaryFileSuffix) ? summaryFileSuffix.length() : exerciseFileSuffix.length());
+		return f.toString().substring(filesLocation.length(), endIndex);
+	}
+	
+	// Return a list of users whose file(s) exist in 
+	public Set<String> getListOfUsers()
+	{
+		Set out = new HashSet<String>();
+		
+		File folder = new File(filesLocation);
+		for (File f : folder.listFiles())
+		{
+			String regex1 = ".*" + exerciseFileSuffix;
+			String regex2 = ".*" + summaryFileSuffix;
+			if (f.isFile() && (f.toString().matches(regex1) || f.toString().matches(regex2)))
+			{
+				out.add(getUsernameFrom(f));
+			}
+		}
+		
+		return out;
 	}
 }

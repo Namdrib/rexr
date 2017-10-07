@@ -20,7 +20,7 @@
 
 ### Running
 #### To record individual sessions
-- `java rexr user name [num1 num2 num3 [..]]`, where:
+- `java rexr add name [num1 num2 num3 [..]]`, where:
 	- `user` represents that the user wants to add an entry to a user
 	- `name` is a single word, containing no spaces. This is what identifies the current user. The name may NOT be "summarise" - this is a reserved command
 	- `num{1,2,3..n}` represent the number of push-ups, sit-ups, and squats to record against `name` for the current day
@@ -32,10 +32,14 @@
 			- the user can signify finishing input by giving an extra [enter] key press
 
 #### To create a summary list
-- `java rexr summar(y|i(s|z)e) [name [names..]]`
+- `java rexr summarise [name [names..]]`
 	- This creates a file summarising the previous efforts (condensing all activities of a day into a single entry) in a human-readable manner
 	- if `name` is provided, it will summarise a single file
 	- otherwise, it will summarise ALL exercise files
+
+#### To get a list of all users who have recorded entries
+- `java rexr list`
+	- this prints the stored name for each recorded user on no particular order, each on its own line
 
 ## Other information
 - the generated files will be stored in the `data` directory
@@ -87,5 +91,5 @@ DATE       | NAME1       | NAME2       | NAME3
 	- the last column does not have extra spacing to pad it to the right
 	- there will only be one name column if it is a named summary file
 	- a row will exist if at least one participant had entries in there
-	- not necessarily inclusive of EVERY date
+	- only inclusive of the first actually-used date
 		- so for example, if nobody did anything on 1970/01/04, but people did things on 1970/01/05, then the fourth of January will be omitted.

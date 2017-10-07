@@ -1,7 +1,8 @@
 # rexr changelog:
 - Author - Denton Phosavanh
-For: Yes
-- Latest version: 1.0.0
+- For: Yes
+- Latest version: 1.0.1
+
 ---
 
 ## Upcoming changes
@@ -9,6 +10,20 @@ For: Yes
 - Consolidate ALL users' files into a summary
 - Discord Bot this
 - Better command line parsing
+
+## [1.0.1] - 2017-10-07
+### Added
+- `list` functionality - lists all users who are recorded
+
+### Removed
+- support for multiple aliases of `summarise`
+	- "summary", "summarize" no longer work (Sorry, U.S. users)
+	- as a consequence, the code that handles commands is now a switch/case instead of if/else
+
+### Changed
+- the `user` command is now the `add` command
+	- this helps keep in check with the whole "everything is a verb" mentality
+- some typos
 
 ## [1.0.0] - 2017-09-10
 ### Added
