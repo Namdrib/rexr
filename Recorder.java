@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -236,7 +235,7 @@ public class Recorder
 	// Return a list of users whose file(s) exist in 
 	public Set<String> getListOfUsers()
 	{
-		Set out = new HashSet<String>();
+		Set<String> out = new HashSet<>();
 		
 		File folder = new File(filesLocation);
 		for (File f : folder.listFiles())

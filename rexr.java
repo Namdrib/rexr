@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -67,7 +66,7 @@ public class rexr
 			}
 		}
 
-		List<Integer> out = new ArrayList<Integer>();
+		List<Integer> out = new ArrayList<>();
 		// Take the numbers from the arguments
 		if (numCorrectArgs >= 3)
 		{
